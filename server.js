@@ -23,18 +23,26 @@ async function askGemini(prompt, pdf) {
     parts.push({ inlineData: { mimeType: "application/pdf", data: pdf.data } });
   }
   parts.push({ text: prompt });
-  const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "x-goog-api-key": process.env.GEMINI_API_KEY },
-    body: JSON.stringify({
-      contents: [{ role: "user", parts }],
-      generationConfig: { responseMimeType: "application/json", temperature: 0.35, maxOutputTokens: 6000 }
-    })
+  const requestBody = JSON.stringify({
+    contents: [{ role: "user", parts }],
+    generationConfig: { responseMimeType: "application/json", temperature: 0.35, maxOutputTokens: 6000 }
   });
-  const payload = await response.json().catch(() => ({}));
+  let response;
+  let payload = {};
+  // Retry temporary Gemini overloads (503) with short exponential backoff.
+  for (let attempt = 0; attempt < 3; attempt++) {
+    response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-goog-api-key": process.env.GEMINI_API_KEY },
+      body: requestBody
+    });
+    payload = await response.json().catch(() => ({}));
+    if (response.status !== 503 || attempt === 2) break;
+    await new Promise(resolve => setTimeout(resolve, 1500 * (2 ** attempt)));
+  }
   if (!response.ok) {
     const error = new Error(payload.error?.message || "Gemini could not complete the request.");
-    error.status = response.status === 429 ? 429 : 502;
+    error.status = response.status === 429 ? 429 : response.status === 503 ? 503 : 502;
     throw error;
   }
   const raw = payload.candidates?.[0]?.content?.parts?.map(p => p.text || "").join("") || "";
