@@ -88,7 +88,7 @@ Return JSON:
 {"score":0,"grade":"Needs work|Developing|Good|Strong|Mastered","verdict":"short overall judgement","accuracy":{"score":0,"feedback":"..."},"completeness":{"score":0,"feedback":"..."},"clarity":{"score":0,"feedback":"..."},"reasoning":{"score":0,"feedback":"..."},"terminology":{"score":0,"feedback":"..."},"correct_points":["..."],"misconceptions":[{"claim":"what learner said","correction":"accurate correction","why":"brief explanation"}],"missing_concepts":["..."],"keywords_to_include":["..."],"model_explanation":"a clear corrected explanation at the selected level","next_step":"one practical instruction","follow_up_question":"one targeted question testing the biggest gap","mastery_achieved":false}
 Each category score is 0-100. Overall score reflects conceptual understanding, not writing style. Be fair: do not penalize simple language when the idea is correct. mastery_achieved is true only if the explanation is accurate, sufficiently complete, and shows sound reasoning (normally score >= 85). If the answer is blank or irrelevant, say so plainly.
 `;
-    const result = await askGemini(prompt);
+    const result = await askGemini(prompt, file);
     res.json(result);
   } catch (e) { res.status(e.status || 500).json({ error: e.message || "Unexpected server error." }); }
 });
