@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#101b2d"><meta name="description" content="Learn science and engineering by explaining concepts with Feynman AI.">
+  <link rel="manifest" href="/manifest.webmanifest"><link rel="stylesheet" href="/styles.css">
+  <title>Feynman AI — Understand it. Explain it.</title>
+</head>
+<body>
+<header class="topbar"><a class="brand" href="#"><span class="brand-mark">F</span><span>feynman<span class="brand-ai">.ai</span></span></a><span class="top-note">LEARN BY EXPLAINING</span></header>
+<main>
+<section class="hero"><div class="eyebrow"><span class="pulse"></span> YOUR PERSONAL SCIENCE & ENGINEERING TUTOR</div><h1>Understand it.<br><em>Explain it.</em></h1><p>Real understanding begins when you can teach an idea in your own words. Let's find out what you truly know.</p></section>
+<section class="workspace">
+  <div class="step-head"><span class="step-num">01</span><div><h2>Bring your study material</h2><p>Upload a PDF or paste your notes. Feynman AI will build a focused learning map.</p></div></div>
+  <div class="input-grid">
+    <label class="upload-box" for="pdf"><span class="upload-icon">↑</span><strong>Upload your PDF</strong><small>PDF format · ideally under 13 MB</small><span id="file-name" class="file-name">Choose a file</span><input id="pdf" type="file" accept="application/pdf"></label>
+    <div class="or-divider"><span>OR</span></div>
+    <label class="notes-label" for="notes">Paste your notes<textarea id="notes" placeholder="Paste lecture notes, textbook excerpts, formulas or concepts here..."></textarea></label>
+  </div>
+  <div class="settings-row"><label>Explanation level<select id="level"><option value="beginner">Beginner — assume I know very little</option><option value="university" selected>University student</option><option value="professional">Professional / advanced</option><option value="toddler">Explain to a toddler</option></select></label><button id="start" class="primary">Build my learning map <span>→</span></button></div>
+  <p class="privacy-note">Your PDF is sent to Gemini for analysis. Avoid uploading confidential documents.</p>
+</section>
+<section id="learning" class="learning hidden">
+  <div class="step-head"><span class="step-num">02</span><div><h2 id="map-title">Your learning map</h2><p id="map-overview"></p></div></div>
+  <div id="topic-list" class="topic-list"></div>
+  <div class="question-card"><div class="question-label">YOUR FIRST FEYNMAN QUESTION</div><h3 id="question"></h3><p>Explain it in your own words. Don't worry about sounding perfect — expose what you understand and what you don't.</p><label for="answer">Your explanation</label><textarea id="answer" rows="6" placeholder="Imagine you're teaching this to someone who has never studied it..."></textarea>
+    <div class="answer-tools"><button id="mic" class="secondary">🎙 Speak answer</button><span id="mic-status" class="muted"></span><button id="submit-answer" class="primary">Assess my understanding →</button></div>
+  </div>
+</section>
+<section id="feedback" class="feedback hidden"><div class="step-head"><span class="step-num">03</span><div><h2>Your understanding report</h2><p>Honest feedback to help you build real mastery.</p></div></div><div id="report"></div></section>
+</main>
+<footer><span>FEYNMAN AI</span><span>Built for curiosity and deep understanding.</span></footer>
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="/app.js" defer></script>
+</body></html>
