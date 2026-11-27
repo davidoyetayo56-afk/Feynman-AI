@@ -1,6 +1,7 @@
 const $ = (id) => document.getElementById(id);
 let session = { material: "", topic: "", level: "university", question: "", previousFeedback: "" };
-let currentFile = null;\nlet sessionFile = null;
+let currentFile = null;
+let sessionFile = null;
 function toast(message) { const el=$("toast"); el.textContent=message; el.classList.add("show"); setTimeout(()=>el.classList.remove("show"),3500); }
 function busy(button, on, label) { button.disabled=on; if(on){button.dataset.old=button.textContent;button.textContent=label||"Working...";}else{button.textContent=button.dataset.old||"Continue";} }
 async function api(url, body) {
@@ -20,7 +21,8 @@ $("pdf").addEventListener("change", async e=>{
 $("start").addEventListener("click",async()=>{
   const text=$("notes").value.trim();
   if(!text&&!currentFile){toast("Upload a PDF or paste your notes first.");return;}
-  session={...session,material:text,level:$("level").value};\n  sessionFile=currentFile;
+  session={...session,material:text,level:$("level").value};
+  sessionFile=currentFile;
   const btn=$("start");busy(btn,true,"Building your map...");
   try{
     const data=await api("/api/analyze",{text,file:currentFile,level:session.level});
