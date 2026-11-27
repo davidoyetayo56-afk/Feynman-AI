@@ -60,10 +60,11 @@ function resetFileInput() {
 }
 function setFile(file) {
   if (!file) return;
+  currentFile = null;
   const isPdf = file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
-  if (!isPdf) { toast("That file doesn't look like a PDF. Please choose a .pdf file."); return; }
-  if (file.size > 13 * 1024 * 1024) { toast("This PDF is over 13 MB. Please choose a smaller file."); return; }
-  if (file.size === 0) { toast("This file appears to be empty. Please choose another PDF."); return; }
+  if (!isPdf) { resetFileInput(); toast("That file doesn't look like a PDF. Please choose a .pdf file."); return; }
+  if (file.size > 13 * 1024 * 1024) { resetFileInput(); toast("This PDF is over 13 MB. Please choose a smaller file."); return; }
+  if (file.size === 0) { resetFileInput(); toast("This file appears to be empty. Please choose another PDF."); return; }
   $("file-name").textContent = file.name;
   $("file-meta").textContent = formatBytes(file.size) + " · Reading file…";
   $("upload-box").classList.add("hidden");
