@@ -1,35 +1,94 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#101b2d"><meta name="description" content="Learn science and engineering by explaining concepts with Feynman AI.">
-  <link rel="manifest" href="/manifest.webmanifest"><link rel="stylesheet" href="/styles.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#101b2d">
+  <meta name="description" content="Learn science and engineering by explaining concepts with Feynman AI.">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="stylesheet" href="/styles.css">
   <title>Feynman AI — Understand it. Explain it.</title>
 </head>
 <body>
-<header class="topbar"><a class="brand" href="#"><span class="brand-mark">F</span><span>feynman<span class="brand-ai">.ai</span></span></a><span class="top-note">LEARN BY EXPLAINING</span></header>
-<main>
-<section class="hero"><div class="eyebrow"><span class="pulse"></span> YOUR PERSONAL SCIENCE & ENGINEERING TUTOR</div><h1>Understand it.<br><em>Explain it.</em></h1><p>Real understanding begins when you can teach an idea in your own words. Let's find out what you truly know.</p></section>
-<section class="workspace">
-  <div class="step-head"><span class="step-num">01</span><div><h2>Bring your study material</h2><p>Upload a PDF or paste your notes. Feynman AI will build a focused learning map.</p></div></div>
-  <div class="input-grid">
-    <label class="upload-box" for="pdf"><span class="upload-icon">↑</span><strong>Upload your PDF</strong><small>PDF format · ideally under 13 MB</small><span id="file-name" class="file-name">Choose a file</span><input id="pdf" type="file" accept="application/pdf"></label>
-    <div class="or-divider"><span>OR</span></div>
-    <label class="notes-label" for="notes">Paste your notes<textarea id="notes" placeholder="Paste lecture notes, textbook excerpts, formulas or concepts here..."></textarea></label>
-  </div>
-  <div class="settings-row"><label>Explanation level<select id="level"><option value="beginner">Beginner — assume I know very little</option><option value="university" selected>University student</option><option value="professional">Professional / advanced</option><option value="toddler">Explain to a toddler</option></select></label><button id="start" class="primary">Build my learning map <span>→</span></button></div>
-  <p class="privacy-note">Your PDF is sent to Gemini for analysis. Avoid uploading confidential documents.</p>
-</section>
-<section id="learning" class="learning hidden">
-  <div class="step-head"><span class="step-num">02</span><div><h2 id="map-title">Your learning map</h2><p id="map-overview"></p></div></div>
-  <div id="topic-list" class="topic-list"></div>
-  <div class="question-card"><div class="question-label">YOUR FIRST FEYNMAN QUESTION</div><h3 id="question"></h3><p>Explain it in your own words. Don't worry about sounding perfect — expose what you understand and what you don't.</p><label for="answer">Your explanation</label><textarea id="answer" rows="6" placeholder="Imagine you're teaching this to someone who has never studied it..."></textarea>
-    <div class="answer-tools"><button id="mic" class="secondary">🎙 Speak answer</button><span id="mic-status" class="muted"></span><button id="submit-answer" class="primary">Assess my understanding →</button></div>
-  </div>
-</section>
-<section id="feedback" class="feedback hidden"><div class="step-head"><span class="step-num">03</span><div><h2>Your understanding report</h2><p>Honest feedback to help you build real mastery.</p></div></div><div id="report"></div></section>
+<header class="topbar">
+  <a class="brand" href="#" aria-label="Feynman AI home"><span class="brand-mark">F</span><span>feynman<span class="brand-ai">.ai</span></span></a>
+  <div class="topbar-right"><span class="top-note"><span class="online-dot"></span> YOUR PERSONAL LEARNING SPACE</span><button id="theme-toggle" class="icon-button" type="button" aria-label="Switch colour theme" title="Switch colour theme">☾</button></div>
+</header>
+<main class="page-shell">
+  <section class="hero">
+    <div class="eyebrow"><span class="pulse"></span> THE FEYNMAN TECHNIQUE, POWERED BY AI</div>
+    <div class="hero-layout">
+      <div><h1>Don't just read it.<br><em>Understand it.</em></h1><p>Turn your lecture notes into a guided learning session. Explain concepts in your own words, expose gaps, and build real understanding one question at a time.</p></div>
+      <div class="hero-note"><span class="hero-note-icon">✳</span><strong>Learn by teaching</strong><span>Read less passively. Think more deeply.</span></div>
+    </div>
+    <div class="hero-points"><span>01 <b>Upload your material</b></span><span>02 <b>Explain your thinking</b></span><span>03 <b>Build mastery</b></span></div>
+  </section>
+
+  <nav class="stepper" aria-label="Learning session steps">
+    <div class="stepper-step active" id="step-upload"><span>01</span><div><b>Study material</b><small>Bring your notes</small></div></div>
+    <div class="stepper-line"></div>
+    <div class="stepper-step" id="step-learn"><span>02</span><div><b>Learning map</b><small>Explore concepts</small></div></div>
+    <div class="stepper-line"></div>
+    <div class="stepper-step" id="step-review"><span>03</span><div><b>Your feedback</b><small>Check understanding</small></div></div>
+  </nav>
+
+  <section class="workspace panel" id="workspace">
+    <div class="section-heading"><div class="section-icon">↥</div><div><div class="section-kicker">START HERE · STEP 01</div><h2>Bring your study material</h2><p>Upload a lecture PDF or paste your notes. Your tutor will turn them into a focused learning map.</p></div></div>
+    <div class="input-grid">
+      <div class="upload-column">
+        <label class="upload-box" id="upload-box" for="pdf" tabindex="0" role="button" aria-label="Choose a PDF file or drop one here">
+          <span class="upload-illustration"><span>↑</span></span>
+          <strong>Drop your PDF here</strong>
+          <small>or tap to browse files on your device</small>
+          <span class="upload-format">PDF ONLY <i>·</i> UP TO 13 MB</span>
+          <input id="pdf" type="file" accept="application/pdf,.pdf">
+        </label>
+        <div class="file-card hidden" id="file-card">
+          <div class="file-type">PDF</div><div class="file-info"><strong id="file-name">Document.pdf</strong><small id="file-meta">Ready to analyse</small></div>
+          <span class="file-ready" aria-label="File ready">✓</span>
+          <button id="remove-file" class="remove-file" type="button" aria-label="Remove selected PDF" title="Remove PDF">×</button>
+        </div>
+        <p class="upload-hint"><span>ⓘ</span> A text-based PDF works best. Scanned or image-only PDFs may be harder for the AI to read.</p>
+      </div>
+      <div class="or-divider"><span>OR</span></div>
+      <div class="notes-column">
+        <label class="notes-label" for="notes"><span>Paste your notes</span><small>Text, formulas, definitions or textbook excerpts</small></label>
+        <textarea id="notes" placeholder="Paste your lecture notes here...&#10;&#10;You can include definitions, examples, equations and anything you want to understand better."></textarea>
+        <div class="notes-meta"><span id="notes-count">0 characters</span><button type="button" id="sample-notes" class="text-button">Try sample notes</button></div>
+      </div>
+    </div>
+    <div class="form-footer">
+      <label class="level-control" for="level"><span>How should your tutor explain?</span><select id="level"><option value="beginner">Beginner — assume I know very little</option><option value="university" selected>University student</option><option value="professional">Professional / advanced</option><option value="toddler">Like I'm a toddler</option></select></label>
+      <button id="start" class="primary" type="button"><span>Build my learning map</span><b>→</b></button>
+    </div>
+    <div class="status-line hidden" id="activity" role="status" aria-live="polite"><span class="loader"></span><span id="activity-text">Preparing your learning session...</span></div>
+    <p class="privacy-note"><span>⌑</span> Your material is sent to Gemini to generate your session. Don't upload confidential documents.</p>
+  </section>
+
+  <section id="learning" class="learning panel hidden">
+    <div class="section-heading section-heading-between"><div class="section-heading"><div class="section-icon mint">◎</div><div><div class="section-kicker">STEP 02 · EXPLORE</div><h2 id="map-title">Your learning map</h2><p id="map-overview"></p></div></div><button id="new-session" class="quiet-button" type="button">↺ New session</button></div>
+    <div class="map-toolbar"><span><b id="topic-count">0</b> focus areas identified</span><span>Tap a topic to explore its subtopics</span></div>
+    <div id="topic-list" class="topic-list"></div>
+    <div id="prerequisites" class="prerequisites hidden"><strong>Useful things to know first</strong><ul id="prerequisite-list"></ul></div>
+    <div class="question-card">
+      <div class="question-topline"><div class="question-label"><span class="question-spark">✳</span> YOUR FEYNMAN QUESTION</div><span class="one-at-time">ONE QUESTION AT A TIME</span></div>
+      <h3 id="question"></h3>
+      <p class="question-guidance">Imagine you're teaching this to someone who has never studied it. Use your own words. Simple explanations are welcome; unsupported guesses are not.</p>
+      <label class="answer-label" for="answer">Your explanation <span>Take your time. Think it through.</span></label>
+      <textarea id="answer" rows="6" placeholder="Start explaining the idea as if you were teaching a friend..."></textarea>
+      <div class="answer-meta"><span id="answer-count">0 words</span><span id="answer-hint">A good explanation includes how and why, not just what.</span></div>
+      <div class="answer-tools"><button id="mic" class="secondary" type="button">🎙 <span>Start speaking</span></button><span id="mic-status" class="muted" role="status"></span><button id="submit-answer" class="primary" type="button"><span>Assess my understanding</span><b>→</b></button></div>
+      <div class="status-line hidden" id="assess-activity" role="status" aria-live="polite"><span class="loader"></span><span id="assess-activity-text">Reviewing your explanation...</span></div>
+    </div>
+  </section>
+
+  <section id="feedback" class="feedback panel hidden">
+    <div class="section-heading"><div class="section-icon gold">✦</div><div><div class="section-kicker">STEP 03 · REFLECT</div><h2>Your understanding report</h2><p>See what you understood, what needs work, and what to try next.</p></div></div>
+    <div id="report"></div>
+  </section>
 </main>
-<footer><span>FEYNMAN AI</span><span>Built for curiosity and deep understanding.</span></footer>
+<footer><a class="footer-brand" href="#">Feynman<span>.AI</span></a><span>Built for curiosity, clarity and deep understanding.</span><span>Keep asking why.</span></footer>
 <div id="toast" role="status" aria-live="polite"></div>
 <script src="/app.js" defer></script>
-</body></html>
+</body>
+</html>
