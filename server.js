@@ -67,7 +67,7 @@ ${text ? "Additional learner notes:\n" + text.slice(0, 50000) : ""}`;
 
 app.post("/api/assess", async (req, res) => {
   try {
-    const { material = "", topic = "", level = "university", question = "", answer = "", previousFeedback = "" } = req.body || {};
+    const { material = "", file, topic = "", level = "university", question = "", answer = "", previousFeedback = "" } = req.body || {};
     if (!topic.trim() || !question.trim() || !answer.trim()) return res.status(400).json({ error: "Topic, question, and your explanation are required." });
     const prompt = `${baseRules}
 Assess this learner's explanation using strict scientific standards. Explanation level: ${level}.
