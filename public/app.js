@@ -1,6 +1,6 @@
 const $ = (id) => document.getElementById(id);
 let session = { material: "", topic: "", level: "university", question: "", previousFeedback: "" };
-let currentFile = null;
+let currentFile = null;\nlet sessionFile = null;
 function toast(message) { const el=$("toast"); el.textContent=message; el.classList.add("show"); setTimeout(()=>el.classList.remove("show"),3500); }
 function busy(button, on, label) { button.disabled=on; if(on){button.dataset.old=button.textContent;button.textContent=label||"Working...";}else{button.textContent=button.dataset.old||"Continue";} }
 async function api(url, body) {
@@ -20,7 +20,7 @@ $("pdf").addEventListener("change", async e=>{
 $("start").addEventListener("click",async()=>{
   const text=$("notes").value.trim();
   if(!text&&!currentFile){toast("Upload a PDF or paste your notes first.");return;}
-  session={...session,material:text,level:$("level").value};
+  session={...session,material:text,level:$("level").value};\n  sessionFile=currentFile;
   const btn=$("start");busy(btn,true,"Building your map...");
   try{
     const data=await api("/api/analyze",{text,file:currentFile,level:session.level});
@@ -38,7 +38,7 @@ $("submit-answer").addEventListener("click",async()=>{
   const answer=$("answer").value.trim();if(!answer){toast("Write or speak your explanation first.");return;}
   const btn=$("submit-answer");busy(btn,true,"Assessing...");
   try{
-    const data=await api("/api/assess",{material:session.material,topic:$("map-title").textContent,level:session.level,question:session.question,answer,previousFeedback:session.previousFeedback});
+    const data=await api("/api/assess",{material:session.material,topic:$("map-title").textContent,level:session.level,question:session.question,answer,previousFeedback:session.previousFeedback,file:sessionFile});
     renderReport(data);session.previousFeedback=JSON.stringify(data).slice(0,2500);
     $("feedback").classList.remove("hidden");$("feedback").scrollIntoView({behavior:"smooth",block:"start"});
   }catch(e){toast(e.message);}finally{busy(btn,false);}
